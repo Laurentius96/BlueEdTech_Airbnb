@@ -22,22 +22,22 @@ export class UserService {
     }
     this.bancoDeDados.push(user);
     // Fazendo que o retorno não leve a senha...
-    const auxbancoAuxiliar = this.bancoDeDados.map((user) => ({
+    const bancoAuxiliar = this.bancoDeDados.map((user) => ({
       nome: user.name,
       email: user.email,
       phone: user.phone,
     }));
-    return this.bancoDeDados;
+
+    return bancoAuxiliar;
   }
 
   // 7°) Criando uma forma de achar o user pelo ID...
   read(id: string) {
     const encontrei = this.bancoDeDados.find((user) => user.id === id);
-    {
-      if (!encontrei) {
-        throw new NotFoundException('Usuário não encontrado');
-      }
-      return encontrei;
+    if (!encontrei) {
+      throw new NotFoundException('Usuário não encontrado');
     }
+
+    return encontrei;
   }
 }
