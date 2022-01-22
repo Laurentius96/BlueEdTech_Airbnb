@@ -1,0 +1,22 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// 2°) Criando as models (tabelas)...
+model User {
+  id        String   @id @default(uuid())
+  email     String   @unique // para o campo ser único - "Travar e sor tem um no banco"
+  firstName String
+  lastName  String
+  password  String
+  imageUrl  String
+  createAt  DateTime @default(now())
+  updateAt  DateTime @updatedAt
+
+  @@map("user") 
+}
