@@ -1,4 +1,4 @@
-// 3°) Add código copiado direto do material do prisma - https://docs.nestjs.com/recipes/prisma
+// 3°) Add código copiado direto da documentação do prisma - https://docs.nestjs.com/recipes/prisma
 import { INestApplication, Injectable, OnModuleInit } from '@nestjs/common';
 import { PrismaClient } from '@prisma/client';
 
