@@ -32,13 +32,16 @@ export class UserService {
     // 11°) Criptografia da senha criada pelo usuário...
     const hashedPassword = await bcrypt.hash(createUserDto.password, 10);
 
-    // 12°) Criando um user com a senha criptografada que irá para o banco...
+    // 12°) Criando um user com a senha criptografada e colocando no banco de dados...
     const createdUser = await this.prismaService.user.create({
       data: {
         ...createUserDto,
         password: hashedPassword,
       },
     });
+
+    delete createdUser.password;
+
     return createdUser;
   }
 }
