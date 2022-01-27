@@ -130,4 +130,26 @@ export class UserService {
 
     return updatedUser;
   }
+
+  // 35°) Método delete...
+  async delete(userId: string) {
+    const userFinded = await this.prismaService.user.findUnique({
+      where: {
+        id: userId,
+      },
+    });
+
+    if (!userFinded) {
+      throw new NotFoundException('Usuário não encontrado');
+    }
+    const deletedUser = await this.prismaService.user.delete({
+      where: {
+        id: userId,
+      },
+    });
+
+    delete deletedUser.password;
+
+    return deletedUser;
+  }
 }
