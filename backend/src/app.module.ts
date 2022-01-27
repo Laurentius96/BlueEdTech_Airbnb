@@ -2,6 +2,7 @@ import { Module } from '@nestjs/common';
 import { UserModule } from './user/user.module';
 import { PropertieModule } from './propertie/propertie.module';
 import { ReservationModule } from './reservation/reservation.module';
+import { AuthModule } from './auth/auth.module';
 
 
 // Decorator - (@) - permite adicionar um comportamento a um objeto já existente em tempo de execução, ou seja, agrega dinamicamente responsabilidades adicionais a um objeto.
@@ -9,7 +10,7 @@ import { ReservationModule } from './reservation/reservation.module';
 // Normalmente UMA classe por arquivo
 // o Módulo é quem comando
 @Module({
-  imports: [UserModule, PropertieModule, ReservationModule],
+  imports: [UserModule, PropertieModule, ReservationModule, AuthModule],
   controllers: [],
   providers: [],
 })
