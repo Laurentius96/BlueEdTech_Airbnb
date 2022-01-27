@@ -1,15 +1,33 @@
-import { Body, Controller, Post,} from '@nestjs/common';
+import { Body, Controller, Get, Param, Post } from '@nestjs/common';
 import { UserService } from './user.service';
 // 13°)Importando o CreateUserDto...
 import { CreateUserDto } from './dto/create-user.dto';
+// 22°) Importando o User...
+import { User } from '@prisma/client';
+// 25°) Importando o UserDto...
+import { UserDto } from './dto/user.dto';
 
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
-  // 14°) Criando mais um método Create...
+  // 14°) Criando o método Create...
   @Post()
-  create(@Body() createUserDto: CreateUserDto) {
+  //23°) Atualizando o com o :Promise<User>...
+  create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
+  }
+
+  // 20°) Criando mais um método...
+  @Get()
+  // 26°) Add o {UserDto}...
+  findMany(): Promise<UserDto[]> {
+    return this.userService.findMany();
+  }
+
+  // 28°)
+  @Get(':id')
+  findUnique(@Param('id') userId: string): Promise<User> {
+    return this.userService.findUnique(userId);
   }
 }
