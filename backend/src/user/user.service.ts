@@ -6,10 +6,15 @@ import {
 // 7°) Importando o CreateUserDto e o PrismaService...
 import { CreateUserDto } from './dto/create-user.dto';
 import { PrismaService } from 'src/prisma.service';
+
 // 21°) Importando o USER...
 import { User } from '@prisma/client';
+
 // 25°) Importando o UserDto...
 import { UserDto } from './dto/user.dto';
+
+// 31°) Importando o Update-User...
+import { UpdateUserDto } from './dto/update-user.dto';
 
 // 10°) Use: 'npm i bcrypt' e o 'npm i -D @types/bcrypt' para pacotes de criptografia e fazer a importação...
 import * as bcrypt from 'bcrypt';
@@ -85,7 +90,8 @@ export class UserService {
   }
 
   // 29°) Método update...
-  async update(userId: string) {
+  // 31°) atualizando com ", updateUserDto: UpdateUserDto"...
+  async update(userId: string, updateUserDto: UpdateUserDto): Promise<User> {
     const userFinded = await this.prismaService.user.findUnique({
       where: {
         id: userId,
@@ -93,10 +99,35 @@ export class UserService {
     });
 
     if (!userFinded) {
-      throw new NotFoundException('Usuário não foi encontrado');
+      throw new NotFoundException('Usuário não encontrado');
     }
 
     // foi criado o arquivo create-user.dtp.ts
+    // 32°) Verificando se o email criado já existe no banco de dados...
+    if (updateUserDto.email) {
+      const emailExists = await this.prismaService.user.findUnique({
+        where: {
+          email: updateUserDto.email,
+        },
+      });
 
+      if (emailExists) {
+        throw new ConflictException('Email já cadastrado');
+      }
+    }
+
+    const updatedUser = await this.prismaService.user.update({
+      where: { id: userId },
+      data: {
+        email: updateUserDto.email,
+        firstName: updateUserDto.firstName,
+        lastName: updateUserDto.lastName,
+        imageUrl: updateUserDto.imageUrl,
+      },
+    });
+
+    delete updatedUser.password;
+
+    return updatedUser;
   }
 }
