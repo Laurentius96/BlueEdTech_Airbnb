@@ -23,7 +23,7 @@ export class JwtStrategy extends PassportStrategy(Strategy) {
     if (!valitedUser) {
       throw new NotFoundException('Usuário não encontrado ou não autenticado');
     }
-
+    
     return valitedUser;
   }
 }
