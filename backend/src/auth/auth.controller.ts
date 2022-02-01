@@ -12,18 +12,33 @@ import { AuthGuard } from '@nestjs/passport';
 import { LoggedUser } from './logged-user.decorator';
 // 67°) Importando o User...
 import { User } from '@prisma/client';
+// 119°) Importando...
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+
+// 120°) Add o @ApiTags('auth')
+@ApiTags('auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}
 
   // 52°) Criando a rota...
   @Post()
+  // 121°) Add ApiOperation...
+  @ApiOperation({
+    summary: 'Fazer login',
+  })
   login(@Body() loginInputDto: LoginInputDto): Promise<LoginResponseDto> {
     return this.authService.login(loginInputDto);
   }
 
   // 57°)
   @Get()
+  // 122°) Add ApiOperation...
+  @ApiOperation({
+    summary: 'Perfil do usuário logado',
+  })
+  // 123°) Add o @ApiBearerAuth(), por causa do Token - @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   // 60°) Colocando o UseGuards...
   @UseGuards(AuthGuard())
   // 66°)
@@ -31,3 +46,5 @@ export class AuthController {
     return user;
   }
 }
+
+// OBS: após atapa 123°) seguimos para o arquivo create-propertie.dto.ts

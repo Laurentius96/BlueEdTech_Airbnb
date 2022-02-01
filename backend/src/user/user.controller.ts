@@ -21,12 +21,21 @@ import { UpdateUserDto } from './dto/update-user.dto';
 import { AuthGuard } from '@nestjs/passport';
 // 75°) Importando LoggedUser...
 import { LoggedUser } from 'src/auth/logged-user.decorator';
+// 106°) Importações...
+import { ApiOperation, ApiTags, ApiBearerAuth } from '@nestjs/swagger';
+
+// 107°) Add o @ApiTags('user)
+@ApiTags('user')
 @Controller('user')
 export class UserController {
   constructor(private readonly userService: UserService) {}
 
   // 14°) Criando o método Create...
   @Post()
+  // 108°) Add ApiOperation...
+  @ApiOperation({
+    summary: 'Cria um usuário',
+  })
   //23°) Atualizando o com o :Promise<User>...
   create(@Body() createUserDto: CreateUserDto): Promise<User> {
     return this.userService.create(createUserDto);
@@ -34,6 +43,12 @@ export class UserController {
 
   // 20°) Criando mais um método...
   @Get()
+  // 109°) Add ApiOperation...
+  @ApiOperation({
+    summary: 'Listar todos os usuários cadastrados',
+  })
+  // 110°) Add o @ApiBearerAuth(), por causa do Token - @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   // 71°) Add o @UseGuards(AuthGuard())...
   @UseGuards(AuthGuard())
   // 26°) Add o {UserDto}...
@@ -43,6 +58,12 @@ export class UserController {
 
   // 28°)
   @Get(':id')
+  // 111°) Add ApiOperation...
+  @ApiOperation({
+    summary: 'Listar um usuário pelo seu id',
+  })
+  // 112°) Add o @ApiBearerAuth(), por causa do Token - @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   // 72°) Add o @UseGuards(AuthGuard())...
   @UseGuards(AuthGuard())
   findUnique(@Param('id') userId: string): Promise<User> {
@@ -52,6 +73,12 @@ export class UserController {
   // 34°)
   // 76°) Retiramos o id do @Patch(':id')...
   @Patch()
+  // 113°) Add ApiOperation...
+  @ApiOperation({
+    summary: 'Atualizar o usuário autenticado',
+  })
+  // 114°) Add o @ApiBearerAuth(), por causa do Token - @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   // 73°) Add o @UseGuards(AuthGuard())...
   @UseGuards(AuthGuard())
   update(
@@ -66,6 +93,12 @@ export class UserController {
   // 36°)
   // 79°) Retiramos o id do @Delete(':id')...
   @Delete()
+  // 115°) Add ApiOperation...
+  @ApiOperation({
+    summary: 'Deletar o usuáro cadastrados',
+  })
+  // 116°) Add o @ApiBearerAuth(), por causa do Token - @UseGuards(AuthGuard())
+  @ApiBearerAuth()
   // 80°) Add o @UseGuards(AuthGuard())...
   @UseGuards(AuthGuard())
   // 81°) Retiramos o "@Param('id') userId: string," dentro () e colocamos no lugar o '@LoggedUser() user: User'
@@ -74,3 +107,6 @@ export class UserController {
     return this.userService.delete(user.id);
   }
 }
+
+// OBS: após atapa 82°) seguimos para o arquivo schema.prisma...
+// OBS: após atapa 116°) seguimos para o arquivo login-input.dto.ts ...
